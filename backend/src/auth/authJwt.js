@@ -19,7 +19,7 @@ export const generateToken =  async (user) => {
       correo: user.correo,
     },
     key,
-    { expiresIn: '10h' }
+    { expiresIn: '5D' }
   );
   return newToken;
 };

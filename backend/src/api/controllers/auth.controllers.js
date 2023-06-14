@@ -34,11 +34,11 @@ export const registro = (req, res) => {
 
 export const ingreso = (req, res) => {
   try {
-    const { correo, clave } = req.body;
+    const { correo, contrasena } = req.body;
     const { error } = validateLogin(req.body);
 
     if (error) {
-      return res.status(400).send({ message: error.details[0].message });
+      return res.status(400).json({ message: error.details[0].message });
     }
 
     connection.query(
@@ -48,11 +48,10 @@ export const ingreso = (req, res) => {
         if (err) throw err;
 
         if (results.length === 0) {
-          res.send({ message: 'Credenciales incorrectas' });
+          res.send({ message: 'No existe un usuario registrado con este correo' });
         } else {
           const hash = results[0].clave;
-
-          bcrypt.compare(clave, hash, (err, isMatch) => {
+          bcrypt.compare(contrasena, hash, (err, isMatch) => {
             if (err) throw err;
 
             if (isMatch) {
@@ -64,8 +63,8 @@ export const ingreso = (req, res) => {
                   const user = results[0];
                   const tokenSession = await generateToken(user);
                   res.send({
-                    data: tokenSession,
-                    message: 'Ingresó con éxito',
+                    token: tokenSession,
+                    message: 'ok',
                   });
                 }
               );
@@ -83,8 +82,8 @@ export const ingreso = (req, res) => {
 
 export const validateLogin = (data) => {
   const schema = Joi.object({
-    correo: Joi.string().email().required().label('Correo'),
-    clave: Joi.string().required().label('clave'),
+    correo: Joi.string().email().required().label('correo'),
+    contrasena: Joi.string().required().label('contraseña'),
   });
   return schema.validate(data);
 };

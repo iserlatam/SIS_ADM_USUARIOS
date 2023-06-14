@@ -5,8 +5,8 @@ const router = Router();
 
 // OBTENER CERTIFICADOS
 router.route('/').get(checkAuth, certificadosCtrl.obtenerCertificados);
-// OBTENER CERTIFICADO POR DOCUMENTO
 
+// OBTENER CERTIFICADO POR DOCUMENTO
 router
   .route('/registro/documento/:documento')
   .get(checkAuth, certificadosCtrl.obtenerCertificadoPorDocumento);
