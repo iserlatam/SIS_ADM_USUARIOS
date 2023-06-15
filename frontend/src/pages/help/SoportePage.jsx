@@ -1,11 +1,11 @@
 import React from 'react';
 
-const UsePage = () => {
+const SoportePage = () => {
     return (
         <div>
-            uso
+            Soporte
         </div>
     );
 }
 
-export default UsePage;
+export default SoportePage;

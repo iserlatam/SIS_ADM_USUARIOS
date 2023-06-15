@@ -6,7 +6,7 @@ export const obtenerCertificados = (req, res) => {
     connection.query('SELECT * FROM certificados', (err, results) => {
       if (err) throw err;
 
-      res.send({ message: "Datos recopilados con éxito", data: results });
+      res.send({ message: 'Datos recopilados con éxito', data: results });
     });
   } catch (e) {
     console.error(e);
@@ -43,7 +43,6 @@ export const obtenerCertificadoPorDocumento = (req, res) => {
 // CREAR CERTIFICADO
 export const crearCertificado = (req, res) => {
   try {
-
     const {
       nombre_completo,
       tipo_doc,
@@ -109,23 +108,32 @@ export const actualizarCertificado = (req, res) => {
     } = req.body;
 
     if (codigo_certificado.length >= 11) {
-      res.status(400).send({message: "Demasiados caracteres para el campo 'codigo_certificado'"})
+      res
+        .status(400)
+        .send({
+          message: "Demasiados caracteres para el campo 'codigo_certificado'",
+        });
     } else {
       // TAREA PENDIENTE: VERIFICAR EL ID DEL CERTIFICADO ANTES DE HACER LA ACCION Y
-    connection.query('SELECT * FROM certificados WHERE id = ?', [id], (err, results) => {
-      if (err) {
-        console.error('Error al ejecutar la consulta:', err);
-        res.status(500).send({ error: 'Error al verificar el registro' });
-        return;
-      }
-  
-      if (results.length === 0) {
-        res.status(404).send({ error: 'Este registro no se encuentra en el sistema' });
-        return;
-      }
-
       connection.query(
-        `UPDATE certificados SET
+        'SELECT * FROM certificados WHERE id = ?',
+        [id],
+        (err, results) => {
+          if (err) {
+            console.error('Error al ejecutar la consulta:', err);
+            res.status(500).send({ error: 'Error al verificar el registro' });
+            return;
+          }
+
+          if (results.length === 0) {
+            res
+              .status(404)
+              .send({ error: 'Este registro no se encuentra en el sistema' });
+            return;
+          }
+
+          connection.query(
+            `UPDATE certificados SET
         nombre_completo = ?,
         tipo_doc = ?,
         documento = ?,
@@ -136,29 +144,32 @@ export const actualizarCertificado = (req, res) => {
         curso = ?,
         codigo_certificado = ?
         WHERE id = ?`,
-        [
-          nombre_completo,
-          tipo_doc,
-          documento,
-          fecha_creacion,
-          departamento,
-          ciudad,
-          empresa,
-          curso,
-          codigo_certificado,
-          id
-        ],
-        (updateErr) => {
-          if (updateErr) {
-            console.error('Error al ejecutar la consulta:', updateErr);
-            res.status(500).send({ error: 'Error interno del servidor' });
-            return;
-          }
+            [
+              nombre_completo,
+              tipo_doc,
+              documento,
+              fecha_creacion,
+              departamento,
+              ciudad,
+              empresa,
+              curso,
+              codigo_certificado,
+              id,
+            ],
+            (updateErr) => {
+              if (updateErr) {
+                console.error('Error al ejecutar la consulta:', updateErr);
+                res.status(500).send({ error: 'Error interno del servidor' });
+                return;
+              }
 
-          res.json({ message: 'El certificado ha sido actualizado correctamente' });
+              res.json({
+                message: 'El certificado ha sido actualizado correctamente',
+              });
+            }
+          );
         }
       );
-    })
     }
   } catch (e) {
     console.error(e);
@@ -172,32 +183,40 @@ export const eliminarCertificado = (req, res) => {
     // TAREA PENDIENTE: VERIFICAR EL DOCUMENTO ANTES DE HACER LA ACCION :: COMPLETADO
     // TAREA COMPLETADA --------------------------------------------------
 
-    connection.query('SELECT * FROM certificados WHERE id = ?', [id], (err, results) => {
-      if (err) {
-        console.error('Error al ejecutar la consulta:', err);
-        res.status(500).send({ error: 'Error al verificar el registro' });
-        return;
-      }
-  
-      if (results.length === 0) {
-        res.status(400).send({ error: 'Este registro no se encuentra en el sistema' });
-        return;
-      }
-
-      connection.query(
-        'DELETE FROM certificados WHERE id = ?',
-        [id],
-        (deleteErr) => {
-          if (deleteErr) {
-            console.error('Error al ejecutar la consulta:', deleteErr);
-            res.status(500).send({ error: 'Error interno del servidor' });
-            return;
-          }
-
-          res.json({ message: 'El certificado ha sido eliminado correctamente' });
+    connection.query(
+      'SELECT * FROM certificados WHERE id = ?',
+      [id],
+      (err, results) => {
+        if (err) {
+          console.error('Error al ejecutar la consulta:', err);
+          res.status(500).send({ error: 'Error al verificar el registro' });
+          return;
         }
-      );
-    })
+
+        if (results.length === 0) {
+          res
+            .status(400)
+            .send({ error: 'Este registro no se encuentra en el sistema' });
+          return;
+        }
+
+        connection.query(
+          'DELETE FROM certificados WHERE id = ?',
+          [id],
+          (deleteErr) => {
+            if (deleteErr) {
+              console.error('Error al ejecutar la consulta:', deleteErr);
+              res.status(500).send({ error: 'Error interno del servidor' });
+              return;
+            }
+
+            res.json({
+              message: 'El certificado ha sido eliminado correctamente',
+            });
+          }
+        );
+      }
+    );
   } catch (e) {
     console.error(e);
   }

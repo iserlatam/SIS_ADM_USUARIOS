@@ -15,13 +15,7 @@ const HelpRoot = () => {
               <NavLink to="/ayuda">Índice</NavLink>
             </li>
             <li className='hover:text-slate-900 transition ease-in'>
-              <NavLink to="uso">Uso del sistema</NavLink>
-            </li>
-            <li className='hover:text-slate-900 transition ease-in'>
-              <NavLink to="tutorial">Tutorial</NavLink>
-            </li>
-            <li className='hover:text-slate-900 transition ease-in'>
-              <NavLink to="soporte">Soporte técnico</NavLink>
+              <NavLink to="soporte-tecnico">Soporte técnico</NavLink>
             </li>
           </ul>
         </nav>

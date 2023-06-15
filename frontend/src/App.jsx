@@ -2,6 +2,8 @@ import './App.css';
 import { Navigate } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
+import { QueryClientProvider, QueryClient } from 'react-query'
+
 import AppRoot from './layout/appRoot/AppRoot';
 import HelpRoot from './layout/helpRoot/HelpRoot'
 
@@ -10,17 +12,20 @@ import ImportExcel from './components/importExcel/ImportExcel';
 import Login from './components/login/Login';
 
 import IndexPage from './pages/help/IndexPage'
-import UsePage from './pages/help/UsePage'
 import Page404 from './pages/404/Page404'
+import SoportePage from './pages/help/SoportePage';
+
+const queryClient = new QueryClient()
 
 const checkToken = () => {
   const user = localStorage.getItem('initialToken');
-  return !!user;
+  return !!user // !!user -> devuelva true si existe y false si es null;
 };
 
 function App() {
   return (
-    <Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
       {checkToken() ? (
         <Routes>
           <Route path="/" element={<AppRoot />}>
@@ -29,7 +34,7 @@ function App() {
           </Route>
           <Route path="/ayuda" element={<HelpRoot />} >
             <Route index element={<IndexPage />} />
-            <Route path='uso' element={<UsePage />} />
+            <Route path='soporte-tecnico' element={<SoportePage />} />
           </Route>
           <Route path="ingreso" element={<Navigate to="/" replace={true} />} />
           <Route path='not-found' element={<Page404 />} />
@@ -45,6 +50,8 @@ function App() {
         </Routes>
       )}
     </Router>
+    </QueryClientProvider>
+    
   );
 }
 
