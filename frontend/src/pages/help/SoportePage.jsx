@@ -3,7 +3,7 @@ import React from 'react';
 const SoportePage = () => {
     return (
         <div>
-            Soporte
+            Acordeon creado
         </div>
     );
 }
