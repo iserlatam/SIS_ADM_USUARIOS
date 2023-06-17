@@ -1,4 +1,5 @@
 import connection from '../../db/conn.js';
+import { format } from 'date-fns';
 
 // OBTENER CERTIFICADOS
 export const obtenerCertificados = (req, res) => {
@@ -47,13 +48,15 @@ export const crearCertificado = (req, res) => {
       nombre_completo,
       tipo_doc,
       documento,
-      fecha_creacion,
       departamento,
       ciudad,
       empresa,
       curso,
       codigo_certificado,
     } = req.body;
+
+    const currentDate = new Date();
+    const fecha_creacion = format(currentDate, 'yyyy-MM-dd');
 
     connection.query(
       `INSERT INTO certificados (
