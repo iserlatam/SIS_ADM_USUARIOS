@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import Avatar from 'boring-avatars';
 import jwtDecode from 'jwt-decode';
-import * as DashboardDs  from '../../services/dashboardDS'
+import { useQuery, useMutation } from 'react-query';
+import * as DashboardDs from '../../services/dashboardDS';
+import Table from './table/Table';
 
 const Dashboard = () => {
   const [user, setUser] = useState({});
-  
+  const [tableData, setTableData] = useState([]);
+
   const getUserInfo = () => {
     const userToken = localStorage.getItem('initialToken');
     const userInfo = jwtDecode(userToken);
@@ -13,19 +16,30 @@ const Dashboard = () => {
   };
 
   const getTableData = async () => {
-    const response = await DashboardDs.getAllCertificados()
-    const data = response.data
-    console.log(data);
-  }
+    const { data: response } = await DashboardDs.getAllCertificados();
+    return response;
+  };
+
+  const getAllRegistersMutate = useMutation(getTableData, {
+    onSuccess: (data) => {
+      JSON.stringify(data, null, 2);
+      setTableData(data.data);
+      console.log(tableData);
+      // setTableData()
+    },
+    onError: (error) => {
+      alert(error);
+    },
+  });
 
   useEffect(() => {
     getUserInfo();
-    getTableData()
+    getAllRegistersMutate.mutate();
   }, []);
 
   return (
-    <>
-      <div className="header flex justify-between">
+    <div className='flex flex-col'>
+      <div className="p-8 container flex justify-between">
         <div
           className="container font-medium"
           style={{ fontFamily: 'Lato', fontSize: '36px' }}
@@ -59,17 +73,22 @@ const Dashboard = () => {
               className="font-medium opacity-50"
               style={{ fontFamily: 'Lato', fontSize: '14px' }}
             >
-            {user.correo}
+              {user.correo}
             </span>
           </div>
         </div>
       </div>
-    </>
+      {getAllRegistersMutate.isLoading ? (
+        <p>cargando...</p>
+      ) : ( 
+        <section className="p-8 container">
+          <div className="overflow-x-auto w-full">
+            <Table data={tableData}></Table>
+          </div>
+        </section>
+      )}
+    </div>
   );
-};
-
-export const dashboardLoader = async () => {
-  return 0;
 };
 
 export default Dashboard;

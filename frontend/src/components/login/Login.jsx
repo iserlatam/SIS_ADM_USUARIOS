@@ -17,11 +17,6 @@ const Login = () => {
       'http://localhost:4205/server/v1/auth/ingreso',
       data
     );
-
-    if (response.message === 'credenciales incorrectas') {
-      setErr(response.message);
-    }
-
     return response;
   };
 

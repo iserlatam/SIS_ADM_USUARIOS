@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
-const Card = ({ title, info }) => {
+import cardsData from './cardsData'
+
+const Card = ({ title, info, urlImg }) => {
   return (
     <div className="container h-auto bg-white flex flex-col justify-center  rounded-md shadow-xl">
       <img
         className="bg-cover"
-        src="https://images.unsplash.com/photo-1553775282-20af80779df7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
+        src={urlImg}
       />
 
       <div className="container p-4 flex flex-col gap-2">
@@ -53,21 +55,20 @@ const SoportePage = () => {
         </h3>
       </section>
       <section
-        className="flex justify-center items-center gap-4 w-full"
+        className="flex justify-center gap-4 pt-6 w-full"
         style={{
           height: '320px',
         }}
       >
         <div className="grid sm:grid-cols-1 md:grid-cols-4 gap-8 w-full px-28">
-          <Card title="Centro de ayuda" info="La vida loca mi fafa"></Card>
-          <Card title="Centro de ayuda" info="La vida loca mi fafa"></Card>
-          <Card title="Centro de ayuda" info="La vida loca mi fafa"></Card>
-          <Card title="Centro de ayuda" info="La vida loca mi fafa"></Card>
+          {cardsData.map((card) => (
+            <Card key={card.id} title={card.title} info={card.info} urlImg={card.urlImg}></Card>
+          ))}
         </div>
 
-        <button onClick={handleOpenBtnN1}>Desplegar</button>
+        {/* <button onClick={handleOpenBtnN1}>Desplegar</button> */}
       </section>
-      {isOpenN1 && <div className="seccion">Esta la abri</div>}
+      {/* {isOpenN1 && <div className="seccion">Esta la abri</div>} */}
     </div>
   );
 };
