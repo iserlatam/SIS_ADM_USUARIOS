@@ -1,0 +1,72 @@
+[
+  {
+    "title": "Inicio de sesión",
+    "info": [
+      {
+        "option": "Credenciales",
+        "description": "Esto es una descripcion"
+      },
+      {
+        "option": "Errores comunes"
+      }
+    ]
+  },
+  {
+    "title": "Interfaz",
+    "info": [
+      {
+        "option": "Certificados"
+      },
+      {
+        "option": "Importación certificados"
+      },
+      {
+        "option": "Ayuda"
+      },
+      {
+        "option": "Cerrar sesión"
+      }
+    ]
+  },
+  {
+    "title": "Certificados",
+    "info": [
+      {
+        "option": "Filtro"
+      },
+      {
+        "option": "Descarga de certificado"
+      },
+      {
+        "option": "Eliminar certificado"
+      }
+    ]
+  },
+  {
+    "title": "Importar certificado",
+    "info": [
+      {
+        "option": "Seleccionar archivo"
+      },
+      {
+        "option": "Subir archivo"
+      }
+    ]
+  },
+  {
+    "title": "Ayuda",
+    "info": [
+      {
+        "option": "Aqui va la explicacion de esta seccion"
+      }
+    ]
+  },
+  {
+    "title": "Cerrar sesión",
+    "info": [
+      {
+        "option": "Aqui va la explicacion de esta seccion"
+      }
+    ]
+  }
+]

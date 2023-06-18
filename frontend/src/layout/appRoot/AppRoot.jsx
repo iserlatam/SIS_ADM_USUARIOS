@@ -55,7 +55,7 @@ const AppRoot = () => {
           </span>
         </div>
       </nav>
-      <main className="main w-full p-8">
+      <main className="main w-full">
         <Outlet />
       </main>
     </div>

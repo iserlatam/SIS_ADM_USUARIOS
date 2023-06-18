@@ -7,7 +7,7 @@ import { QueryClientProvider, QueryClient } from 'react-query'
 import AppRoot from './layout/appRoot/AppRoot';
 import HelpRoot from './layout/helpRoot/HelpRoot'
 
-import Dashboard, { dashboardLoader } from './components/dashboard,/Dashboard';
+import Dashboard from './components/dashboard,/Dashboard';
 import ImportExcel from './components/importExcel/ImportExcel';
 import Login from './components/login/Login';
 
