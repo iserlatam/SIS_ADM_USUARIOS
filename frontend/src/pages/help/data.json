@@ -4,10 +4,11 @@
     "info": [
       {
         "option": "Credenciales",
-        "description": "Esto es una descripcion"
+        "description": "Para poder acceder al aplicativo, es necesario contar con credenciales previas. En caso de que no dispongas de estas credenciales, te recomendamos comunicarte con el propietario de la empresa para obtenerlas."
       },
       {
-        "option": "Errores comunes"
+        "option": "Errores comunes",
+        "description": "Si te aparece un error, es probable que hayas introducido incorrectamente algún carácter, ya sea en el nombre de usuario o en la contraseña. Por favor, asegúrate de ingresar los datos de manera precisa para evitar este tipo de inconvenientes."
       }
     ]
   },
@@ -15,16 +16,24 @@
     "title": "Interfaz",
     "info": [
       {
-        "option": "Certificados"
+        "option": "Sesión",
+        "description": "En la parte superior del aplicativo, encontrarás el nombre de la sesión junto con el correo correspondiente. Esto te permitirá identificar de manera clara y visual que te encuentras en tu sesión personalizada."
       },
       {
-        "option": "Importación certificados"
+        "option": "Certificados",
+        "description": "En la sección de certificados, encontrarás el listado completo de certificados disponibles para su consulta. Aquí podrás acceder a información detallada sobre cada certificado existente."
       },
       {
-        "option": "Ayuda"
+        "option": "Importación certificados",
+        "description": "En esta sección, tendrás la posibilidad de ingresar los certificados."
       },
       {
-        "option": "Cerrar sesión"
+        "option": "Ayuda",
+        "description": "Esta sección ha sido diseñada específicamente para brindarte ayuda y soporte en cada sección del aplicativo. Aquí encontrarás soluciones a los incidentes o problemas que puedan surgir durante su uso. Nuestro objetivo es proporcionarte la asistencia necesaria para resolver cualquier inconveniente que puedas enfrentar."
+      },
+      {
+        "option": "Cerrar sesión",
+        "description": "Si haces clic en el botón \"Cerrar sesión\", podrás salir del aplicativo de manera segura. "
       }
     ]
   },
@@ -32,13 +41,20 @@
     "title": "Certificados",
     "info": [
       {
-        "option": "Filtro"
+        "option": "Filtro",
+        "description": "En nuestra plataforma, ofrecemos diversas opciones de filtros para buscar y consultar datos de manera efectiva. Contamos con un filtro global que te permite realizar búsquedas en todo el sistema. Para utilizar este filtro, simplemente haz clic en el icono de búsqueda 🔍. Además, también tienes la posibilidad de realizar consultas específicas utilizando filtros por columna. Este filtro se encuentra en la columna principal y te mostrará los resultados relacionados con esa columna en particular. Esto te brinda una mayor flexibilidad y precisión al buscar la información que necesitas en nuestra plataforma."
       },
       {
-        "option": "Descarga de certificado"
+        "option": "Descarga de certificado",
+        "description": "Para realizar la descarga del certificado seleccionado, simplemente haz clic en el icono de descarga ⬇️. Al hacerlo, el certificado se descargará automáticamente a tu dispositivo."
       },
       {
-        "option": "Eliminar certificado"
+        "option": "Agregar registro nuevo",
+        "description": "Para agregar un nuevo registro, simplemente haz clic en el icono de \"más\" ➕. Al seleccionarlo, se abrirá un formulario donde podrás ingresar y completar la información correspondiente al nuevo registro. "
+      },
+      {
+        "option": "Eliminar registro",
+        "description": "Para eliminar un registro, simplemente haz clic en el icono de la papelera 🗑️. Al hacerlo, se realizará la acción de eliminación del registro seleccionado."
       }
     ]
   },
@@ -46,10 +62,12 @@
     "title": "Importar certificado",
     "info": [
       {
-        "option": "Seleccionar archivo"
+        "option": "Seleccionar archivo",
+        "description": "Encontrarás un botón que te permitirá seleccionar un archivo. Al hacer clic en este botón, se abrirá una ventana de exploración de archivos donde podrás navegar y seleccionar el certificado que deseas importar. Es importante destacar que el archivo debe tener una extensión .CSV. Si intentas subir un archivo con una extensión diferente, el sistema no permitirá la importación del certificado. Asegúrate de utilizar únicamente archivos con la extensión correcta (.CSV) para una importación exitosa."
       },
       {
-        "option": "Subir archivo"
+        "option": "Subir archivo",
+        "description": "Inicialmente, el botón de \"Subir archivo\" estará deshabilitado hasta que realices la importación del archivo. Una vez que tengas un archivo listo para subir, podrás activar este botón y así cargar el certificado seleccionado de manera exitosa."
       }
     ]
   },
@@ -57,7 +75,8 @@
     "title": "Ayuda",
     "info": [
       {
-        "option": "Aqui va la explicacion de esta seccion"
+        "option": "Seccion de ayuda",
+        "description": "En esta sección, encontrarás ayuda específica para cada sección de la plataforma. Simplemente haz clic en las diferentes opciones disponibles y te proporcionaremos una breve descripción que te ayudará a resolver cualquier duda que puedas tener. Estamos aquí para brindarte la información necesaria y aclarar cualquier incógnita que puedas tener en cada sección de la plataforma."
       }
     ]
   },
@@ -65,7 +84,8 @@
     "title": "Cerrar sesión",
     "info": [
       {
-        "option": "Aqui va la explicacion de esta seccion"
+        "option": "Salir del aplicativo",
+        "description": "Para salir del aplicativo, simplemente debes hacer clic en \"Cerrar sesión\". El aplicativo te redirigirá a la pantalla de inicio de sesión, lo que indica que tu sesión ha sido cerrada con éxito. Puedes estar tranquilo/a sabiendo que has finalizado tu sesión de manera segura."
       }
     ]
   }

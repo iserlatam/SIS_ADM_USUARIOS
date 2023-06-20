@@ -1,7 +1,8 @@
 import mysql from 'mysql';
 
 const user = 'root'
-const password = '2105'
+// const password = '2105'
+const password = ''
 const host = 'localhost'
 const database = 'SIS_ADM_USUARIOS'
 
