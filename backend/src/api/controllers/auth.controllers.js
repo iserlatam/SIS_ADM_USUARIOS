@@ -1,7 +1,6 @@
 import bcrypt from 'bcrypt';
 import connection from '../../db/conn.js';
 import Joi from 'joi';
-import jwt from 'jsonwebtoken';
 import { generateToken } from '../../auth/authJwt.js';
 
 export const registro = (req, res) => {

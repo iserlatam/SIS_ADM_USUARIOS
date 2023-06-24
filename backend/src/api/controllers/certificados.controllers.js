@@ -1,5 +1,4 @@
 import connection from '../../db/conn.js';
-import { format } from 'date-fns';
 
 // OBTENER CERTIFICADOS
 export const obtenerCertificados = (req, res) => {
@@ -7,7 +6,9 @@ export const obtenerCertificados = (req, res) => {
     connection.query('SELECT * FROM certificados', (err, results) => {
       if (err) throw err;
 
-      res.send({ message: 'Datos recopilados con éxito', data: results });
+      console.dir(results.length);
+
+      res.json(results);
     });
   } catch (e) {
     console.error(e);
@@ -48,6 +49,7 @@ export const crearCertificado = (req, res) => {
       nombre_completo,
       tipo_doc,
       documento,
+      fecha_creacion,
       departamento,
       ciudad,
       empresa,
@@ -55,8 +57,7 @@ export const crearCertificado = (req, res) => {
       codigo_certificado,
     } = req.body;
 
-    const currentDate = new Date();
-    const fecha_creacion = format(currentDate, 'yyyy-MM-dd');
+    const docFixed = tipo_doc.toLowerCase()
 
     connection.query(
       `INSERT INTO certificados (
@@ -74,7 +75,7 @@ export const crearCertificado = (req, res) => {
        )`,
       [
         nombre_completo,
-        tipo_doc,
+        docFixed,
         documento,
         fecha_creacion,
         departamento,
@@ -102,8 +103,8 @@ export const actualizarCertificado = (req, res) => {
       nombre_completo,
       tipo_doc,
       documento,
-      fecha_creacion,
       departamento,
+      fecha_creacion,
       ciudad,
       empresa,
       curso,

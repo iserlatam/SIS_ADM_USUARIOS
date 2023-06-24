@@ -1,49 +1,60 @@
-import React, { useMemo, useState, useCallback, useEffect } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { MaterialReactTable } from 'material-react-table';
-import { HiPencil, HiOutlineTrash, HiDownload, HiPlus } from 'react-icons/hi';
+import langConfig from './langConfig';
+
 import moment from 'moment';
-import { ListItemIcon, MenuItem } from '@mui/material';
-import { ExportToCsv } from 'export-to-csv';
 
 import { useMutation } from 'react-query';
+import * as dashboardDs from '../../../services/dashboardDS';
 
-import langConfig from './langConfig';
-import { CreateNewAccountModal } from './CreateNewRegister';
+import { ExportToCsv } from 'export-to-csv';
 
-const Table = ({ data }) => {
+import { Button, IconButton, Tooltip } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
+
+import { FormRegisterModal } from './modals/FormRegisterModal';
+import { postFormData, updateData } from './modals/requestFns';
+import { HiPencil, HiOutlineTrash, HiDownload, HiPlus } from 'react-icons/hi';
+import { MdClose, MdDeleteForever, MdWarning } from 'react-icons/md';
+
+import * as toasts from './modals/toasts/confirmToasts';
+
+const Table = ({ data, mutate }) => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [validationErrors, setValidationErrors] = useState({});
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const [rowInfo, setRowInfo] = useState(null);
   const [countryData, setCountryData] = useState([]);
 
+  const [id, setId] = useState(0);
+
   const getCountryInfo = async () => {
-    const response = await fetch('https://raw.githubusercontent.com/marcovega/colombia-json/master/colombia.min.json')
-    return response.json()
-  }
+    const response = await fetch(
+      'https://raw.githubusercontent.com/marcovega/colombia-json/master/colombia.min.json'
+    );
+    return response.json();
+  };
 
   const countryMutation = useMutation(getCountryInfo, {
     onSuccess: (data) => {
-      setCountryData(data)
+      setCountryData(data);
     },
     onError: (error) => {
       console.log(error);
-    }
-  })
-
-  useEffect(
-    () => {
-      countryMutation.mutate()
-      console.log(countryData);
     },
-    []
-  )
+  });
+
+  useEffect(() => {
+    countryMutation.mutate();
+  }, []);
 
   const columns = useMemo(
     () => [
       {
         accessorKey: 'id', //simple recommended way to define a column
         header: 'ID', //optional custom props
-        enableSorting: false,
         enableEditing: false,
         size: 25,
         Header: <span>ID</span>,
@@ -58,8 +69,9 @@ const Table = ({ data }) => {
       },
       {
         accessorKey: 'tipo_doc',
-        header: 'Tipo Doc',
+        header: 'tipo_doc',
         size: 25,
+        Header: <span>Tipo Doc</span>,
         Cell: ({ cell }) => <span>{cell.getValue()}</span>,
       },
       {
@@ -70,10 +82,15 @@ const Table = ({ data }) => {
       },
       {
         accessorKey: 'fecha_creacion',
-        header: 'Fecha de Creación',
+        header: 'fecha_creacion',
         size: 25,
+        Header: <span>Fecha de Certificado</span>,
         enableEditing: false,
-        Cell: ({ cell }) => <span>{moment(cell.getValue()).format('L')}</span>,
+        Cell: ({ cell }) => {
+          const date = cell.getValue();
+          const fixedDate = moment(date).format('DD MMM YYYY');
+          return <span>{fixedDate}</span>;
+        },
       },
       {
         accessorKey: 'departamento',
@@ -97,7 +114,7 @@ const Table = ({ data }) => {
       },
       {
         accessorKey: 'codigo_certificado',
-        header: 'Código Certificado',
+        header: 'Codigo Certificado',
         size: 25,
       },
     ],
@@ -109,9 +126,10 @@ const Table = ({ data }) => {
     quoteStrings: '"',
     decimalSeparator: '.',
     showLabels: true,
+    showTitle: false,
     useBom: true,
     useKeysAsHeaders: false,
-    headers: columns.map((c) => c.header),
+    headers: columns.map((c) => c.header.replace(/ /g, '_').toLowerCase()),
   };
 
   const csvExporter = new ExportToCsv(csvOptions);
@@ -120,8 +138,82 @@ const Table = ({ data }) => {
     csvExporter.generateCsv(data);
   };
 
+  const handleDeleteClick = async () => {
+    await dashboardDs.deleteCertificado(id);
+    toasts.deleteResToast();
+    refreshData();
+  };
+
+  const openDeleteModal = (id) => {
+    setId(id);
+    setDeleteModalOpen(true);
+  };
+
+  function handleCreateClick() {
+    setCreateModalOpen(true);
+  }
+
+  function handleEditClick(row) {
+    setRowInfo(row);
+    setUpdateModalOpen(true);
+  }
+
+  const refreshData = () => {
+    mutate();
+  };
+
   return (
     <>
+      {deleteModalOpen && (
+        <div className="z-20 fixed bg-opacity-50 bg-gray-700 inset-0 w-screen h-screen flex items-center justify-center">
+          <div className="relative border w-[500px] shadow-lg rounded-md flex flex-col items-center justify-center bg-white">
+            <div className="container flex justify-between border-b-2 w-full py-6 px-4 items-center">
+              <div className="flex gap-3 items-center">
+                <div className="rounded-full bg-red-200 p-2">
+                  <MdWarning size={20} className="text-red-600" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-extrabold text-slate-700 text-left">
+                    Eliminar registro No. {id}
+                  </h3>
+                </div>
+              </div>
+              <div>
+                <MdClose
+                  onClick={() => setDeleteModalOpen(false)}
+                  size={25}
+                  className="text-neutral-600 cursor-pointer"
+                />
+              </div>
+            </div>
+
+            <div className="container flex flex-col gap-2 border-b-2 w-full py-4 px-4">
+              <p className="text-base block">
+                ¿Está seguro que desea eliminar el <b>registro No. {id}</b>?{' '}
+                <span className="text-lg font-bold">
+                  {' '}
+                  Esta acción es irreversible
+                </span>
+              </p>
+            </div>
+
+            <div className="container w-full py-4 px-4 flex flex-row justify-end gap-2">
+              <Button onClick={() => setDeleteModalOpen(false)}>
+                regresar
+              </Button>
+              <Button
+                className="flex items-center gap-1"
+                color="error"
+                variant="contained"
+                onClick={handleDeleteClick}
+              >
+                <span>Confimar</span>
+                <MdDeleteForever size={16} />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       <MaterialReactTable
         columns={columns}
         data={data}
@@ -133,58 +225,75 @@ const Table = ({ data }) => {
         enableColumnFilterModes
         enableRowActions
         enableEditing
-        initialState={{ showColumnFilters: false }}
         renderTopToolbarCustomActions={() => (
           <div className="flex gap-1">
-            <button
-              title="exportar registros"
-              className="hover:bg-gray-100 active:bg-gray-300 transition ease-out duration-300 p-2 rounded-full"
-              onClick={handleExportData}
-            >
-              <HiDownload size={23} className="text-neutral-500"></HiDownload>
-            </button>
-            <button
-              title="Agregar registro nuevo"
-              className="hover:bg-gray-100 active:bg-gray-300 transition ease-out duration-300 p-2 rounded-full"
-              onClick={() => setCreateModalOpen(true)}
-            >
-              <HiPlus size={23} className="text-neutral-500"></HiPlus>
-            </button>
+            <Tooltip arrow title="Recargar datos">
+              <IconButton onClick={refreshData}>
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip arrow title="Exportar registros">
+              <button
+                className="hover:bg-gray-100 active:bg-gray-300 transition ease-out duration-300 p-2 rounded-full"
+                onClick={handleExportData}
+              >
+                <HiDownload size={23} className="text-neutral-500"></HiDownload>
+              </button>
+            </Tooltip>
+            <Tooltip arrow title="Agregar registro">
+              <button
+                className="hover:bg-gray-100 active:bg-gray-300 transition ease-out duration-300 p-2 rounded-full"
+                onClick={handleCreateClick}
+              >
+                <HiPlus size={23} className="text-neutral-500"></HiPlus>
+              </button>
+            </Tooltip>
           </div>
         )}
-        renderRowActionMenuItems={({ closeMenu, row }) => [
-          <MenuItem
-            key={0}
-            onClick={() => {
-              console.log(row.original.id);
-              closeMenu();
-            }}
-            sx={{ m: 0 }}
-          >
-            <ListItemIcon>
-              <HiPencil />
-            </ListItemIcon>
-            Actualizar registro
-          </MenuItem>,
-          <MenuItem
-            key={1}
-            onClick={() => {
-              closeMenu();
-            }}
-            sx={{ m: 0 }}
-          >
-            <ListItemIcon>
-              <HiOutlineTrash />
-            </ListItemIcon>
-            Eliminar registro
-          </MenuItem>,
+        renderRowActions={({ row }) => [
+          <div className="container flex gap-4 justify-center">
+            <button
+              onClick={() => {
+                openDeleteModal(row.original.id);
+              }}
+              className="w-18 h-18"
+            >
+              <HiOutlineTrash size={19} />
+            </button>
+            <button
+              // onClick={() => table.setEditingRow(row)}
+              onClick={() => {
+                handleEditClick(row.original);
+              }}
+              className="w-18 h-18"
+            >
+              <HiPencil size={19} />
+            </button>
+          </div>,
         ]}
       />
-      <CreateNewAccountModal
+
+      {rowInfo && (
+        <FormRegisterModal
+          columns={columns}
+          isEditing={true}
+          open={updateModalOpen}
+          onClose={() => setUpdateModalOpen(false)}
+          countryData={countryData}
+          row={rowInfo}
+          refreshData={refreshData}
+          reqFn={updateData}
+        />
+      )}
+
+      <FormRegisterModal
         columns={columns}
+        isEditing={false}
         open={createModalOpen}
-        countryData={countryData}
         onClose={() => setCreateModalOpen(false)}
+        countryData={countryData}
+        reqFn={postFormData}
+        refreshData={refreshData}
       />
     </>
   );

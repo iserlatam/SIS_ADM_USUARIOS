@@ -1,7 +1,9 @@
 {
   "name": "frontend",
+  "description": "SAU es una plataforma de administracion de certificaciones",
+  "author": "iserlatam",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.9",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,16 +19,20 @@
     "@popperjs/core": "^2.11.8",
     "axios": "^1.4.0",
     "boring-avatars": "^1.10.1",
+    "csv-parser": "^3.0.0",
     "export-to-csv": "^0.2.1",
     "jwt-decode": "^3.1.2",
     "material-react-table": "^1.13.0",
     "moment": "^2.29.4",
+    "papaparse": "^5.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.44.3",
     "react-icons": "^4.9.0",
+    "react-loader-spinner": "^5.3.4",
     "react-query": "^3.39.3",
-    "react-router-dom": "^6.12.1"
+    "react-router-dom": "^6.12.1",
+    "toastify-js": "^1.12.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

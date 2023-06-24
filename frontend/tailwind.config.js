@@ -5,8 +5,21 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
-  },
-  plugins: [],
+    extend: {
+      colors: {
+        'cake-blue': {
+          900: '#1d6ab5',
+          800: '#217bd2',
+          700: '#358bdf',
+          600: '#529ce4',
+          500: '#6face8',
+          400: '#8cbded',
+          300: '#a8cdf1',
+          200: '#c5def6',
+          100: '#e2eefa',
+        }
+      }
+    }
+  }
 }
 

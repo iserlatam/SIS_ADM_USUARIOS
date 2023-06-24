@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Avatar from 'boring-avatars';
 import jwtDecode from 'jwt-decode';
-import { useQuery, useMutation } from 'react-query';
+import { useMutation } from 'react-query';
 import * as DashboardDs from '../../services/dashboardDS';
+
 import Table from './table/Table';
+
+import { Dna } from 'react-loader-spinner';
 
 const Dashboard = () => {
   const [user, setUser] = useState({});
@@ -16,16 +19,14 @@ const Dashboard = () => {
   };
 
   const getTableData = async () => {
-    const { data: response } = await DashboardDs.getAllCertificados();
+    const response = await DashboardDs.getAllCertificados();
     return response;
   };
 
-  const getAllRegistersMutate = useMutation(getTableData, {
+  const { mutate, isLoading } = useMutation(getTableData, {
     onSuccess: (data) => {
-      JSON.stringify(data, null, 2);
-      setTableData(data.data);
-      console.log(tableData);
-      // setTableData()
+      const res = data.data;
+      setTableData(res);
     },
     onError: (error) => {
       alert(error);
@@ -34,60 +35,85 @@ const Dashboard = () => {
 
   useEffect(() => {
     getUserInfo();
-    getAllRegistersMutate.mutate();
+    mutate();
   }, []);
 
   return (
-    <div className='flex flex-col'>
-      <div className="p-8 container flex justify-between">
-        <div
-          className="container font-medium"
-          style={{ fontFamily: 'Lato', fontSize: '36px' }}
-        >
-          <h2>Bienvenido/a</h2>
+    <>
+      {!isLoading ? (
+        <div className="flex flex-col">
+          <div className="p-8 container flex justify-between">
+            <div
+              className="container font-medium"
+              style={{ fontFamily: 'Lato', fontSize: '36px' }}
+            >
+              <h2>Bienvenido/a</h2>
+            </div>
+            <div className="flex w-full justify-end">
+              <div className="flex gap-4 justify-center items-center">
+                <div className="container w-auto">
+                  <Avatar
+                    size={60}
+                    name="Mahalia Jackson"
+                    variant="beam"
+                    colors={[
+                      '#0E6DDF',
+                      '#D23535',
+                      '#EDEDED',
+                      '#C271B4',
+                      '#C20D90',
+                    ]}
+                  />
+                </div>
+                <div>
+                  <h4
+                    className="font-medium"
+                    style={{
+                      fontFamily: 'Lato',
+                      fontSize: '28px',
+                      lineHeight: '35px',
+                    }}
+                  >
+                    {user.alias}
+                  </h4>
+                  <span
+                    className="font-medium opacity-50"
+                    style={{ fontFamily: 'Lato', fontSize: '14px' }}
+                  >
+                    {user.correo}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <section className="p-8 container">
+            <div className="overflow-x-auto w-full">
+              <Table
+                data={tableData}
+                mutate={mutate}
+                isLoading={isLoading}
+              ></Table>
+            </div>
+          </section>
         </div>
-        <div
-          className="container flex gap-4 justify-between items-center"
-          style={{ flexBasis: '261px' }}
-        >
-          <div className="container" style={{ width: 'auto' }}>
-            <Avatar
-              size={60}
-              name="Mahalia Jackson"
-              variant="beam"
-              colors={['#0E6DDF', '#D23535', '#EDEDED', '#C271B4', '#C20D90']}
+      ) : (
+        <div className="w-full h-full flex items-center justify-center">
+          <div className="container flex flex-col items-center justify-center">
+            <Dna
+              visible={true}
+              height="80"
+              width="80"
+              ariaLabel="dna-loading"
+              wrapperStyle={{}}
+              wrapperClass="dna-wrapper"
             />
-          </div>
-          <div className="container">
-            <h4
-              className="font-medium"
-              style={{
-                fontFamily: 'Lato',
-                fontSize: '28px',
-                lineHeight: '35px',
-              }}
-            >
-              {user.alias}
-            </h4>
-            <span
-              className="font-medium opacity-50"
-              style={{ fontFamily: 'Lato', fontSize: '14px' }}
-            >
-              {user.correo}
-            </span>
+            <p className="font-bold tracking-wide text-gray-600">
+              Cargando ...
+            </p>
           </div>
         </div>
-      </div>
-      {getAllRegistersMutate.isLoading ? (
-        <p>cargando...</p>
-      ) : ( 
-        <section className="p-8 container">
-          <div className="overflow-x-auto w-full">
-            <Table data={tableData}></Table>
-          </div>
-        </section>
       )}
-    </div>
+    </>
   );
 };
 

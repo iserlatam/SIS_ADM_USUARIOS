@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import compression from 'compression'
 
 import authRoutes from './api/routes/auth.routes.js'
 import usersRoutes from './api/routes/users.routes.js'
@@ -15,8 +16,9 @@ const app = express();
 
 // MIDDLEWARES
 app.use(cors());
-app.use(morgan('dev'));
+app.use(morgan('combined'));
 app.use(express.json())
+app.use(compression())
 
 app.use('/server/v1/auth', authRoutes)
 app.use('/server/v1/usuarios', usersRoutes)

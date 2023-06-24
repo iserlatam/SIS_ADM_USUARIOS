@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
@@ -14,25 +14,31 @@ const Login = () => {
 
   const postData = async (data) => {
     const { data: response } = await axios.post(
-      'http://localhost:4205/server/v1/auth/ingreso',
+      'https://api.seconalprueba.com/server/v1/auth/ingreso',
       data
     );
     return response;
   };
 
-  const mutation = useMutation(postData, {
+  const { mutate, isLoading } = useMutation(postData, {
     onSuccess: (data) => {
       // ERROR DE AUTENTICACIÓN
       if (data.message === 'Credenciales incorrectas') {
-        alert('No pasas por acá');
         setErr(data.message);
         setTimeout(() => {
           setErr(false);
         }, 3000);
-      } else {
+      }
+      if (data.message === 'No existe un usuario registrado con este correo') {
+        setErr(data.message);
+        setTimeout(() => {
+          setErr(false);
+        }, 3000);
+      }
+      if (data.message === 'ok') {
         // VALIDACIÓN EXITOSA
         localStorage.setItem('initialToken', data.token);
-        window.location.href = '/';
+        window.location.href = '/pcc/';
       }
     },
     onError: (error) => {
@@ -41,7 +47,7 @@ const Login = () => {
   });
 
   const onSubmit = (data) => {
-    mutation.mutate(data);
+    mutate(data);
   };
 
   const {
@@ -82,7 +88,7 @@ const Login = () => {
 
   return (
     <>
-      {mutation.isLoading && (
+      {isLoading && (
         <div className="bg-gray-100 w-full min-h-screen flex justify-center items-center">
           <div className="bg-white p-10 shadow-xl rounded-md relative flex flex-col justify-center items-center">
             <img src={eclipse} alt="" />
@@ -94,7 +100,7 @@ const Login = () => {
           </div>
         </div>
       )}
-      {!mutation.isLoading && (
+      {!isLoading && (
         <div className="bg-cover bg-center flex justify-center items-center custom-opacity">
           <div
             className="container flex flex-col items-center justify-center gap-6 rounded-sm"
@@ -117,6 +123,7 @@ const Login = () => {
               <div className="container">
                 <input
                   {...register('correo', {
+                    required: true,
                     pattern: /\S+@\S+\.\S+/,
                   })}
                   type="text"
