@@ -6,16 +6,16 @@ const HelpRoot = () => {
       <header>
         <nav className="w-full fixed bg-white h-14 shadow-md flex justify-between items-center px-7 font-medium text-slate-500">
           <div className="container">
-            <NavLink to="/" className='hover:text-white text-slate-900 transition ease-in-out'>
+            <NavLink to="/pcc" className='hover:text-white text-slate-900 transition ease-in-out'>
                 <button className='hover:bg-blue-800 border-2 border-blue-800 rounded h-8 w-16'>Atrás</button>
             </NavLink>
           </div>
           <ul className="inline-flex gap-4 justify-end text-base basis-full">
             <li className='hover:text-slate-900 transition ease-in'>
-              <NavLink to="/ayuda">Índice</NavLink>
+              <NavLink to="/pcc/soporte">Índice</NavLink>
             </li>
             <li className='hover:text-slate-900 transition ease-in'>
-              <NavLink to="soporte-tecnico">Soporte técnico</NavLink>
+              <NavLink to="atencion-cliente">Soporte técnico</NavLink>
             </li>
           </ul>
         </nav>

@@ -37,9 +37,9 @@ const ImportExcel = () => {
                 delete row.ID;
               } else {
                 try {
-                  setIsLoading(true);
+                  setIsLoading(true); 
 
-                  const fixedDate = moment.utc(row.fecha_creacion).toISOString();
+                  const fixedDate = moment.utc(row.fecha_creacion, "DD-MM-YYYY").format("YYYY-MM-DD");
                   row.fecha_creacion = fixedDate;
 
                   await postNewCertificado(row);

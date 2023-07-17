@@ -23,26 +23,28 @@ const Login = () => {
   const { mutate, isLoading } = useMutation(postData, {
     onSuccess: (data) => {
       // ERROR DE AUTENTICACIÓN
-      if (data.message === 'Credenciales incorrectas') {
-        setErr(data.message);
-        setTimeout(() => {
-          setErr(false);
-        }, 3000);
-      }
-      if (data.message === 'No existe un usuario registrado con este correo') {
-        setErr(data.message);
-        setTimeout(() => {
-          setErr(false);
-        }, 3000);
-      }
-      if (data.message === 'ok') {
+      if (data.message === 'OK') {
         // VALIDACIÓN EXITOSA
         localStorage.setItem('initialToken', data.token);
         window.location.href = '/pcc/';
       }
     },
     onError: (error) => {
-      setErr(error);
+      if (error.response && error.response.status === 401) {
+        setErr(error.response.data.message);
+        setTimeout(() => {
+          setErr(false);
+        }, 3000);
+      }
+      if (error.response && error.response.status === 404) {
+        setErr(error.response.data.error);
+
+        setTimeout(() => {
+          setErr(false);
+        }, 3000);
+      } else {
+        setErr(error.response.data.message);
+      }
     },
   });
 

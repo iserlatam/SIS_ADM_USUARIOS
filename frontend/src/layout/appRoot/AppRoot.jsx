@@ -7,7 +7,7 @@ import './AppRoot.css';
 import { MdCategory } from 'react-icons/md';
 import { FiUploadCloud } from 'react-icons/fi';
 import { ImExit } from 'react-icons/im';
-// import { BiHelpCircle } from 'react-icons/bi';
+import { BiHelpCircle } from 'react-icons/bi';
 
 const handleLogout = () => {
   localStorage.clear();
@@ -33,11 +33,11 @@ const AppRoot = () => {
                 <FiUploadCloud size={30} className="text-white" />
               </li>
             </NavLink>
-            {/* <NavLink to="/ayuda">
+            <NavLink to="/pcc/soporte">
                 <li className="container p-5 flex justify-center items-center transition ease-out hover:bg-[#2F345A]">
                   <BiHelpCircle size={30} className="text-white" />
                 </li>
-              </NavLink> */}
+              </NavLink>
             <li
               onClick={handleLogout}
               className="cursor-pointer container p-5 flex justify-center items-center transition ease-out hover:bg-[#2F345A]"
