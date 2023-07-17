@@ -1,2 +1,5 @@
 */node_modules
 backend/.env
+backend/logs/*
+backend/pm2.config.cjs
+frontend/dist/*
