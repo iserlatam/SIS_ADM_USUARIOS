@@ -19,6 +19,9 @@ const Page404 = () => {
             Volver al inicio
           </button>
         </a>
+        <a href="/pcc/soporte" className='w-full text-center mt-2 underline text-gray-600'>
+          Ir a la guía
+        </a>
       </div>
     </div>
   );

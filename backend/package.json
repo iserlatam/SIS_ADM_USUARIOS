@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "pm2 start pm2.config.cjs"
+    "dev": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
@@ -25,5 +25,8 @@
     "jsonwebtoken": "^9.0.0",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
   }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Outlet, NavLink } from 'react-router-dom';
-import logoApp from './logoApp.svg';
-import brandIser from './IserBrand.svg';
+
 import './AppRoot.css';
 
 import { MdCategory } from 'react-icons/md';
@@ -20,7 +19,7 @@ const AppRoot = () => {
       <aside className="container bg-cake-blue-900 flex flex-col justify-between bg-cake-blue h-[100vh] w-[100px]">
         <div className="container flex flex-col gap-1">
           <div className="flex justify-center items-center px-1.5 py-5">
-            <img src={logoApp} />
+            <img src="/logoApp.svg" />
           </div>
           <ul className="flex flex-col custom-nav">
             <NavLink to="/pcc/">
@@ -47,7 +46,7 @@ const AppRoot = () => {
           </ul>
         </div>
         <a href="https://iserlatam.com/" target='_blank'>
-        <img src={brandIser} alt="" />
+        <img src="/IserBrand.svg" alt="" />
         </a>
       </aside>
 

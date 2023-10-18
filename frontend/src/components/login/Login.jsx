@@ -5,8 +5,6 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 
-import eclipse from './eclipse.svg';
-import logo from './nobglogo.png';
 import './Login.css';
 
 const Login = () => {
@@ -93,7 +91,7 @@ const Login = () => {
       {isLoading && (
         <div className="bg-gray-100 w-full min-h-screen flex justify-center items-center">
           <div className="bg-white p-10 shadow-xl rounded-md relative flex flex-col justify-center items-center">
-            <img src={eclipse} alt="" />
+            <img src="/eclipse.svg" alt="" />
             <div className="container ms-3 flex flex-col gap-1">
               <h2 className="text-xl font-normal text-gray-500">
                 {getDayTime()} 👋
@@ -116,7 +114,7 @@ const Login = () => {
             }}
           >
             <div className="container">
-              <img src={logo} />
+              <img src="/nobglogo.png" />
             </div>
             <form
               onSubmit={handleSubmit(onSubmit)}

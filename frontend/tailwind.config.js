@@ -17,9 +17,13 @@ export default {
           300: '#a8cdf1',
           200: '#c5def6',
           100: '#e2eefa',
+          50: '#f9f9f9'
         }
       }
     }
-  }
+  },
+  variants: {
+    borderWidth: ['responsive', 'hover', 'focus'],
+  },
 }
 

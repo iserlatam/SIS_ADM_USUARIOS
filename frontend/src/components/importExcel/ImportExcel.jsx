@@ -25,27 +25,93 @@ const ImportExcel = () => {
 
       reader.onload = (event) => {
         const csvData = event.target.result;
+
+        Papa.parse(csvData, {
+          header: true,
+          complete: async (results) => {
+            const rows = results.data;
+            rows.pop();
+
+            const batchInsertSize = 100; // Tamaño de inserción en lote
+
+            // Dividir los registros en grupos de tamaño de inserción en lote
+            for (let i = 0; i < rows.length; i += batchInsertSize) {
+              const batchRows = rows.slice(i, i + batchInsertSize);
+
+              const insertPromises = batchRows.map(async (row) => {
+                if (row.ID) {
+                  delete row.ID;
+                } else {
+                  try {
+                    const fixedDate = moment
+                      .utc(row.fecha_creacion, 'DD-MM-YYYY')
+                      .format('YYYY-MM-DD');
+                    row.fecha_creacion = fixedDate;
+
+                    await postNewCertificado(row);
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }
+              });
+
+              try {
+                setIsLoading(true);
+
+                // Esperar a que se completen todas las inserciones en el lote actual
+                await Promise.all(insertPromises);
+
+                console.log('Lote subido correctamente!');
+              } catch (e) {
+                console.error('Error al subir el lote:', e);
+              } finally {
+                setIsLoading(false);
+              }
+            }
+
+            console.log(
+              'Todos los registros han sido procesados correctamente!'
+            );
+            window.location.href = '/pcc/';
+          },
+          error: (error) => {
+            console.error('Error al parsear el archivo CSV:', error);
+          },
+        });
+      };
+
+      reader.readAsText(selectedFile);
+    }
+  };
+
+  const handleFileUploa = () => {
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const csvData = event.target.result;
         Papa.parse(csvData, {
           header: true,
           complete: (results) => {
             const rows = results.data;
 
-            rows.pop()
+            rows.pop();
 
             rows.forEach(async (row) => {
               if (row.ID) {
                 delete row.ID;
               } else {
                 try {
-                  setIsLoading(true); 
+                  setIsLoading(true);
 
-                  const fixedDate = moment.utc(row.fecha_creacion, "DD-MM-YYYY").format("YYYY-MM-DD");
+                  const fixedDate = moment
+                    .utc(row.fecha_creacion, 'DD-MM-YYYY')
+                    .format('YYYY-MM-DD');
                   row.fecha_creacion = fixedDate;
 
                   await postNewCertificado(row);
                   console.log('Subido correctamente!');
                   window.location.href = '/pcc/';
-
                 } catch (e) {
                   console.error(e);
                 } finally {
@@ -53,8 +119,6 @@ const ImportExcel = () => {
                 }
               }
             });
-
-            console.log(rows);
           },
           error: (error) => {
             console.error('Error al parsear el archivo CSV:', error);
@@ -195,21 +259,23 @@ const ImportExcel = () => {
           </div>
         </>
       ) : (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="container flex flex-col items-center justify-center">
-            <Dna
-              visible={true}
-              height="80"
-              width="80"
-              ariaLabel="dna-loading"
-              wrapperStyle={{}}
-              wrapperClass="dna-wrapper"
-            />
-            <p className="font-bold tracking-wide text-gray-600">
-              Cargando ...
-            </p>
+        <>
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="container flex flex-col items-center justify-center">
+              <Dna
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="dna-loading"
+                wrapperStyle={{}}
+                wrapperClass="dna-wrapper"
+              />
+              <p className="font-bold tracking-wide text-gray-600">
+                Cargando ...
+              </p>
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );
